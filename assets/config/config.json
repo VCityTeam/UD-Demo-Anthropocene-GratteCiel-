@@ -59,6 +59,7 @@
     "guidedTour": "guidedTour",
     "link": "link"
   },
+  "geoserver":"http://localhost:8998/geoserver/cite/ows?",
   "extents": {
     "min_x": "1837860.980127206",
     "max_x": "1851647",

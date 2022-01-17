@@ -215,7 +215,7 @@ app.start('../assets/config/config.json').then((config) => {
         source: BatimentsSource,
         style: new udviz.itowns.Style({
           fill:{
-            base_altitude: 170.1,
+            base_altitude: 180.1,
             color: colorSurfaceBatiments,
           }
       })
@@ -223,207 +223,258 @@ app.start('../assets/config/config.json').then((config) => {
 
     app.view.addLayer(BatimentsLayer);
 
-    ////---GeoServer layers---////
-
-    let wfsMetroSource = new udviz.itowns.WFSSource({
-      url: geoserverAdress,
+    var busSource = new udviz.itowns.WFSSource({
+      url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
       protocol: 'wfs',
-      version: '1.0.0',
-      id: 'Metro',
-      typeName: 'cite:metro_lines_buffer',
+      version: '2.0.0',
+      id: 'bus',
+      typeName: 'plu_h_opposable.pluzoncol',
       crs: 'EPSG:3946',
       extent: app.extent,
-      format: 'application/json',
-    });
+      format: 'geojson',
+  });
+  
+  var busLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
+      update: udviz.itowns.FeatureProcessing.update,
+      convert: udviz.itowns.Feature2Mesh.convert(),
+      source: busSource,
+      style: new udviz.itowns.Style({
+        fill:{
+          base_altitude: 180.1,
+          color: colorLineMetro,
+        }
+    })
+  });
 
-    var wfsMetroLayer = new udviz.itowns.GeometryLayer('Metro', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsMetroSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorLineMetro,
-            base_altitude : 170.2,
-          }
-      })
-    });
+  app.view.addLayer(busLayer);
 
-    app.view.addLayer(wfsMetroLayer);
+    var travauxSource = new udviz.itowns.WFSSource({
+      url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
+      protocol: 'wfs',
+      version: '2.0.0',
+      id: 'bus',
+      typeName: 'plu_h_opposable.pluzoncol',
+      crs: 'EPSG:3946',
+      extent: app.extent,
+      format: 'geojson',
+  });
 
-    let wfsRoadsSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'Roads',
-        typeName: 'cite:Voirie_Extent',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+  var travauxLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
+      update: udviz.itowns.FeatureProcessing.update,
+      convert: udviz.itowns.Feature2Mesh.convert(),
+      source: travauxSource,
+      style: new udviz.itowns.Style({
+        fill:{
+          base_altitude: 180.1,
+          color: colorLineMetro,
+        }
+    })
+  });
 
-    var wfsRoadsLayer = new udviz.itowns.GeometryLayer('Chaussee_Trottoirs', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsRoadsSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorLineRoads,
-            base_altitude : 170.3,
-          }
-      })
-    });
+  app.view.addLayer(travauxLayer);
 
-    app.view.addLayer(wfsRoadsLayer);
 
-    let wfsRailsSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'Rails',
-        typeName: '	cite:fpcvoieferree_Extent',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    ////---GeoServer layers---////
 
-    var wfsRailsLayer = new udviz.itowns.GeometryLayer('Voies_Ferrées', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsRailsSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorLineRails,
-            base_altitude : 170.4,
-          }
-      })
-    });
+    // let wfsMetroSource = new udviz.itowns.WFSSource({
+    //   url: geoserverAdress,
+    //   protocol: 'wfs',
+    //   version: '1.0.0',
+    //   id: 'Metro',
+    //   typeName: 'cite:metro_lines_buffer',
+    //   crs: 'EPSG:3946',
+    //   extent: app.extent,
+    //   format: 'application/json',
+    // });
 
-    app.view.addLayer(wfsRailsLayer);
+    // var wfsMetroLayer = new udviz.itowns.GeometryLayer('Metro', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsMetroSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorLineMetro,
+    //         base_altitude : 170.2,
+    //       }
+    //   })
+    // });
 
-    let wfsEVA_STRSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'wfs_EVA_STR',
-        typeName: '	cite:EVA2015_Vegetation3STR_Extent',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    // app.view.addLayer(wfsMetroLayer);
 
-    var wfsEVA_STRLayer = new udviz.itowns.GeometryLayer('EVA_Vegetation', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsEVA_STRSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorEVAVegetation,
-            base_altitude : 170.5,
-          }
-      })
-    });
+    // let wfsRoadsSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'Roads',
+    //     typeName: 'cite:Voirie_Extent',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
 
-    app.view.addLayer(wfsEVA_STRLayer);
+    // var wfsRoadsLayer = new udviz.itowns.GeometryLayer('Chaussee_Trottoirs', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsRoadsSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorLineRoads,
+    //         base_altitude : 170.3,
+    //       }
+    //   })
+    // });
+
+    // app.view.addLayer(wfsRoadsLayer);
+
+    // let wfsRailsSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.3.0',
+    //     id: 'Rails',
+    //     typeName: '	cite:fpcvoieferree_Extent',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
+
+    // var wfsRailsLayer = new udviz.itowns.GeometryLayer('Réseau de bus', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsRailsSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorLineRails,
+    //         base_altitude : 170.4,
+    //       }
+    //   })
+    // });
+
+    // app.view.addLayer(wfsRailsLayer);
+
+    // let wfsEVA_STRSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'wfs_EVA_STR',
+    //     typeName: '	cite:EVA2015_Vegetation3STR_Extent',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
+
+    // var wfsEVA_STRLayer = new udviz.itowns.GeometryLayer('EVA_Vegetation', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsEVA_STRSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorEVAVegetation,
+    //         base_altitude : 170.5,
+    //       }
+    //   })
+    // });
+
+    // app.view.addLayer(wfsEVA_STRLayer);
     
-    let wfsEVA_ArtifSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'wfs_EVA_Artif',
-        typeName: 'cite:EVA2015_Artif_Sols_Extent',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    // let wfsEVA_ArtifSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'wfs_EVA_Artif',
+    //     typeName: 'cite:EVA2015_Artif_Sols_Extent',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
 
-    var wfsEVA_ArtifLayer = new udviz.itowns.GeometryLayer('EVA_Artif_Sols_Nus', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsEVA_ArtifSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorEVAArtif,
-            base_altitude : 170,
-          }
-      })
-    });
+    // var wfsEVA_ArtifLayer = new udviz.itowns.GeometryLayer('EVA_Artif_Sols_Nus', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsEVA_ArtifSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorEVAArtif,
+    //         base_altitude : 170,
+    //       }
+    //   })
+    // });
 
-    app.view.addLayer(wfsEVA_ArtifLayer);
+    // app.view.addLayer(wfsEVA_ArtifLayer);
 
     ////---Masks---////
-    let wfsMaskASource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'MaskA',
-        typeName: 'cite:A=Difference_EVA_Artificialise-Routes',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    // let wfsMaskASource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'MaskA',
+    //     typeName: 'cite:A=Difference_EVA_Artificialise-Routes',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
 
-    var wfsMaskALayer = new udviz.itowns.GeometryLayer('MaskA', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsMaskASource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorEVAArtif,
-            base_altitude : 170,
-          }
-      })
-    });
+    // var wfsMaskALayer = new udviz.itowns.GeometryLayer('MaskA', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsMaskASource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorEVAArtif,
+    //         base_altitude : 170,
+    //       }
+    //   })
+    // });
 
-    app.view.addLayer(wfsMaskALayer);
+    // app.view.addLayer(wfsMaskALayer);
 
-    let wfsMaskBSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'MaskB',
-        typeName: 'cite:B=A-Voies_ferree',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    // let wfsMaskBSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'MaskB',
+    //     typeName: 'cite:B=A-Voies_ferree',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
 
-    var wfsMaskBLayer = new udviz.itowns.GeometryLayer('MaskB', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsMaskBSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorEVAArtif,
-            base_altitude : 170,
-          }
-      })
-    });
+    // var wfsMaskBLayer = new udviz.itowns.GeometryLayer('MaskB', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsMaskBSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorEVAArtif,
+    //         base_altitude : 170,
+    //       }
+    //   })
+    // });
 
-    app.view.addLayer(wfsMaskBLayer);
+    // app.view.addLayer(wfsMaskBLayer);
 
-    let wfsMaskCSource = new udviz.itowns.WFSSource({
-        url: geoserverAdress,
-        protocol: 'wfs',
-        version: '1.0.0',
-        id: 'MaskC',
-        typeName: 'cite:C=B-Batiments',
-        crs: 'EPSG:3946',
-        extent: app.extent,
-        format: 'application/json',
-    });
+    // let wfsMaskCSource = new udviz.itowns.WFSSource({
+    //     url: geoserverAdress,
+    //     protocol: 'wfs',
+    //     version: '1.0.0',
+    //     id: 'MaskC',
+    //     typeName: 'cite:C=B-Batiments',
+    //     crs: 'EPSG:3946',
+    //     extent: app.extent,
+    //     format: 'application/json',
+    // });
 
-    var wfsMaskCLayer = new udviz.itowns.GeometryLayer('MaskC', new udviz.THREE.Group(), {
-        update: udviz.itowns.FeatureProcessing.update,
-        convert: udviz.itowns.Feature2Mesh.convert(),
-        source: wfsMaskCSource,
-        style: new udviz.itowns.Style({
-          fill:{
-            color: colorEVAArtif,
-            base_altitude : 170,
-          }
-      })
-    });
-    app.view.addLayer(wfsMaskCLayer);  
+    // var wfsMaskCLayer = new udviz.itowns.GeometryLayer('MaskC', new udviz.THREE.Group(), {
+    //     update: udviz.itowns.FeatureProcessing.update,
+    //     convert: udviz.itowns.Feature2Mesh.convert(),
+    //     source: wfsMaskCSource,
+    //     style: new udviz.itowns.Style({
+    //       fill:{
+    //         color: colorEVAArtif,
+    //         base_altitude : 170,
+    //       }
+    //   })
+    // });
+    // app.view.addLayer(wfsMaskCLayer);  
 
 });
 

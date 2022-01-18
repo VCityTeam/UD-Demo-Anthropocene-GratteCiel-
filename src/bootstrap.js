@@ -22,67 +22,6 @@ app.start('../assets/config/config.json').then((config) => {
   const help = new udviz.Widgets.HelpWindow(config.helpWindow);
   app.addModuleView('help', help);
 
-  ////// AUTHENTICATION MODULE
-  const authenticationService =
-    new udviz.Widgets.Extensions.AuthenticationService(
-      requestService,
-      app.config
-    );
-
-  const authenticationView = new udviz.Widgets.Extensions.AuthenticationView(
-    authenticationService
-  );
-  app.addModuleView('authentication', authenticationView, {
-    type: udviz.Templates.AllWidget.AUTHENTICATION_MODULE,
-  });
-
-  ////// DOCUMENTS MODULE
-  let documentModule = new udviz.Widgets.DocumentModule(
-    requestService,
-    app.config
-  );
-  app.addModuleView('documents', documentModule.view);
-
-  ////// DOCUMENTS VISUALIZER EXTENSION (to orient the document)
-  const imageOrienter = new udviz.Widgets.DocumentVisualizerWindow(
-    documentModule,
-    app.view,
-    app.controls
-  );
-
-  ////// CONTRIBUTE EXTENSION
-  new udviz.Widgets.Extensions.ContributeModule(
-    documentModule,
-    imageOrienter,
-    requestService,
-    app.view,
-    app.controls,
-    app.config
-  );
-
-  ////// VALIDATION EXTENSION
-  new udviz.Widgets.Extensions.DocumentValidationModule(
-    documentModule,
-    requestService,
-    app.config
-  );
-
-  ////// DOCUMENT COMMENTS
-  new udviz.Widgets.Extensions.DocumentCommentsModule(
-    documentModule,
-    requestService,
-    app.config
-  );
-
-  ////// GUIDED TOURS MODULE
-  const guidedtour = new udviz.Widgets.GuidedTourController(
-    documentModule,
-    requestService,
-    app.config
-  );
-  app.addModuleView('guidedTour', guidedtour, {
-    name: 'Guided Tours',
-  });
 
   ////// GEOCODING EXTENSION
   const geocodingService = new udviz.Widgets.Extensions.GeocodingService(
@@ -107,24 +46,6 @@ app.start('../assets/config/config.json').then((config) => {
   );
   app.addModuleView('cityObjects', cityObjectModule.view);
 
-  ////// LINKS MODULE
-  new udviz.Widgets.LinkModule(
-    documentModule,
-    cityObjectModule,
-    requestService,
-    app.view,
-    app.controls,
-    app.config
-  );
-
-  ////// 3DTILES DEBUG
-  const debug3dTilesWindow = new udviz.Widgets.Extensions.Debug3DTilesWindow(
-    app.layerManager
-  );
-  app.addModuleView('3dtilesDebug', debug3dTilesWindow, {
-    name: '3DTiles Debug',
-  });
-
   ////// CAMERA POSITIONER
   const cameraPosition = new udviz.Widgets.CameraPositionerView(
     app.view,
@@ -138,27 +59,6 @@ app.start('../assets/config/config.json').then((config) => {
 
   ////// LAYER GEOSERVER
     let geoserverAdress = app.config["geoserver"];
-
-    let wmsPolutedGroundSource = new udviz.itowns.WMSSource({
-      extent: app.extent,
-      name: 'SSP_CLASSIFICATION',
-      url: ' https://www.georisques.gouv.fr/services',
-      version: '1.3.0',
-      crs: 'EPSG:4326',
-      format: 'image/png',
-    });
-
-    let wmsPolutedGroundLayer = new udviz.itowns.ColorLayer('wms_Ground_Polution', {
-        updateStrategy: {
-            type: udviz.itowns.STRATEGY_DICHOTOMY,
-            options: {},
-            altitude: 1,
-
-        },
-        source: wmsPolutedGroundSource,
-    });
-
-    app.view.addLayer(wmsPolutedGroundLayer);
 
     var color = new udviz.THREE.Color();
 
@@ -232,250 +132,117 @@ app.start('../assets/config/config.json').then((config) => {
       crs: 'EPSG:3946',
       extent: app.extent,
       format: 'geojson',
-  });
+    });
   
-  var busLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
-      update: udviz.itowns.FeatureProcessing.update,
-      convert: udviz.itowns.Feature2Mesh.convert(),
-      source: busSource,
-      style: new udviz.itowns.Style({
-        fill:{
-          base_altitude: 180.1,
-          color: colorLineMetro,
-        }
-    })
-  });
+    var busLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
+        update: udviz.itowns.FeatureProcessing.update,
+        convert: udviz.itowns.Feature2Mesh.convert(),
+        source: busSource,
+        style: new udviz.itowns.Style({
+          fill:{
+            base_altitude: 170.1,
+            color: colorLineMetro,
+          }
+      })
+    });
 
-  app.view.addLayer(busLayer);
+    app.view.addLayer(busLayer);
 
-    var travauxSource = new udviz.itowns.WFSSource({
-      url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
-      protocol: 'wfs',
-      version: '2.0.0',
-      id: 'bus',
-      typeName: 'plu_h_opposable.pluzoncol',
+    // Emprise ------------------------------------
+    const emprise_1_Source = new udviz.itowns.FileSource({
+      url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_1000.geojson',
       crs: 'EPSG:3946',
-      extent: app.extent,
-      format: 'geojson',
-  });
+      format: 'application/json',
+    });
+    // Create a ColorLayer for the Ariege area
+    const emrpise_1_Layer = new udviz.itowns.ColorLayer('emprise', {
+        name: 'Emprise_1',
+        transparent: true,
+        source: emprise_1_Source,
+        style: new udviz.itowns.Style({
+            fill: {
+                color: 'yellow',
+                opacity: 0.5,
+            },
+            stroke: {
+                color: 'white',
+            },
+        }),
+    });
+    // Add the Ariege ColorLayer to the view and grant it a tooltip
+    app.view.addLayer(emrpise_1_Layer);
 
-  var travauxLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
-      update: udviz.itowns.FeatureProcessing.update,
-      convert: udviz.itowns.Feature2Mesh.convert(),
-      source: travauxSource,
-      style: new udviz.itowns.Style({
-        fill:{
-          base_altitude: 180.1,
-          color: colorLineMetro,
-        }
-    })
-  });
+    // Emprise 2 ------------------------------------
+    const emprise_2_Source = new udviz.itowns.FileSource({
+      url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_750.geojson',
+      crs: 'EPSG:3946',
+      format: 'application/json',
+    });
+    // Create a ColorLayer for the Ariege area
+    const emrpise_2_Layer = new udviz.itowns.ColorLayer('emprise2', {
+        name: 'Emprise_2',
+        transparent: true,
+        source: emprise_2_Source,
+        style: new udviz.itowns.Style({
+            fill: {
+                color: 'green',
+                opacity: 0.5,
+            },
+            stroke: {
+                color: 'white',
+            },
+        }),
+    });
+    // Add the Ariege ColorLayer to the view and grant it a tooltip
+    app.view.addLayer(emrpise_2_Layer);
 
-  app.view.addLayer(travauxLayer);
+      // Declare the source for the data on Ariege area ------------------------------------
+      const ariegeSource = new udviz.itowns.FileSource({
+        url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Buildings_3946.geojson',
+        crs: 'EPSG:3946',
+        format: 'application/json',
+    });
+    // Create a ColorLayer for the Ariege area
+    const ariegeLayer = new udviz.itowns.ColorLayer('ariege', {
+        name: 'building',
+        transparent: true,
+        source: ariegeSource,
+        style: new udviz.itowns.Style({
+            fill: {
+                color: 'orange',
+                opacity: 0.5,
+            },
+            stroke: {
+                color: 'white',
+            },
+        }),
+    });
+    // Add the Ariege ColorLayer to the view and grant it a tooltip
+    app.view.addLayer(ariegeLayer);
 
-
-    ////---GeoServer layers---////
-
-    // let wfsMetroSource = new udviz.itowns.WFSSource({
-    //   url: geoserverAdress,
-    //   protocol: 'wfs',
-    //   version: '1.0.0',
-    //   id: 'Metro',
-    //   typeName: 'cite:metro_lines_buffer',
-    //   crs: 'EPSG:3946',
-    //   extent: app.extent,
-    //   format: 'application/json',
-    // });
-
-    // var wfsMetroLayer = new udviz.itowns.GeometryLayer('Metro', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsMetroSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorLineMetro,
-    //         base_altitude : 170.2,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsMetroLayer);
-
-    // let wfsRoadsSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'Roads',
-    //     typeName: 'cite:Voirie_Extent',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsRoadsLayer = new udviz.itowns.GeometryLayer('Chaussee_Trottoirs', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsRoadsSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorLineRoads,
-    //         base_altitude : 170.3,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsRoadsLayer);
-
-    // let wfsRailsSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.3.0',
-    //     id: 'Rails',
-    //     typeName: '	cite:fpcvoieferree_Extent',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsRailsLayer = new udviz.itowns.GeometryLayer('Réseau de bus', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsRailsSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorLineRails,
-    //         base_altitude : 170.4,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsRailsLayer);
-
-    // let wfsEVA_STRSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'wfs_EVA_STR',
-    //     typeName: '	cite:EVA2015_Vegetation3STR_Extent',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsEVA_STRLayer = new udviz.itowns.GeometryLayer('EVA_Vegetation', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsEVA_STRSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorEVAVegetation,
-    //         base_altitude : 170.5,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsEVA_STRLayer);
-    
-    // let wfsEVA_ArtifSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'wfs_EVA_Artif',
-    //     typeName: 'cite:EVA2015_Artif_Sols_Extent',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsEVA_ArtifLayer = new udviz.itowns.GeometryLayer('EVA_Artif_Sols_Nus', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsEVA_ArtifSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorEVAArtif,
-    //         base_altitude : 170,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsEVA_ArtifLayer);
-
-    ////---Masks---////
-    // let wfsMaskASource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'MaskA',
-    //     typeName: 'cite:A=Difference_EVA_Artificialise-Routes',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsMaskALayer = new udviz.itowns.GeometryLayer('MaskA', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsMaskASource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorEVAArtif,
-    //         base_altitude : 170,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsMaskALayer);
-
-    // let wfsMaskBSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'MaskB',
-    //     typeName: 'cite:B=A-Voies_ferree',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsMaskBLayer = new udviz.itowns.GeometryLayer('MaskB', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsMaskBSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorEVAArtif,
-    //         base_altitude : 170,
-    //       }
-    //   })
-    // });
-
-    // app.view.addLayer(wfsMaskBLayer);
-
-    // let wfsMaskCSource = new udviz.itowns.WFSSource({
-    //     url: geoserverAdress,
-    //     protocol: 'wfs',
-    //     version: '1.0.0',
-    //     id: 'MaskC',
-    //     typeName: 'cite:C=B-Batiments',
-    //     crs: 'EPSG:3946',
-    //     extent: app.extent,
-    //     format: 'application/json',
-    // });
-
-    // var wfsMaskCLayer = new udviz.itowns.GeometryLayer('MaskC', new udviz.THREE.Group(), {
-    //     update: udviz.itowns.FeatureProcessing.update,
-    //     convert: udviz.itowns.Feature2Mesh.convert(),
-    //     source: wfsMaskCSource,
-    //     style: new udviz.itowns.Style({
-    //       fill:{
-    //         color: colorEVAArtif,
-    //         base_altitude : 170,
-    //       }
-    //   })
-    // });
-    // app.view.addLayer(wfsMaskCLayer);  
-
+    // Road ----------------------------------
+     const roadSource = new udviz.itowns.FileSource({
+      url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson',
+      crs: 'EPSG:3946',
+      format: 'application/json',
+    });
+    // Create a ColorLayer for the road line
+    const roadLayer = new udviz.itowns.ColorLayer('road', {
+        name: 'Road',
+        transparent: true,
+        source: roadSource,
+        style: new udviz.itowns.Style({
+            fill: {
+                color: 'red',
+                opacity: 0.5,
+            },
+            stroke: {
+                color: 'black',
+            },
+        }),
+    });
+    // Add the Ariege ColorLayer to the view and grant it a tooltip
+    app.view.addLayer(roadLayer);
 });
 
 

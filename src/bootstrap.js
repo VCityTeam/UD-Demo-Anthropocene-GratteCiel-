@@ -1,6 +1,7 @@
 /** @format */
 
 import * as udviz from 'ud-viz';
+import { SlideShow } from './SlideShow';
 import { LayerView } from './LayerView';
 
 const app = new udviz.Templates.AllWidget();
@@ -19,9 +20,9 @@ app.start('../assets/config/config.json').then((config) => {
   const about = new udviz.Widgets.AboutWindow();
   app.addModuleView('about', about);
 
-  ////// HELP MODULE
-  const help = new udviz.Widgets.HelpWindow(config.helpWindow);
-  app.addModuleView('help', help);
+  // ////// HELP MODULE
+  // const help = new udviz.Widgets.HelpWindow(config.helpWindow);
+  // app.addModuleView('help', help);
 
   ////// AUTHENTICATION MODULE
   const authenticationService =
@@ -238,5 +239,52 @@ app.start('../assets/config/config.json').then((config) => {
   
 });
 
+  // Declare the source for the data on Ariege area ------------------------------------
+  const ariegeSource = new udviz.itowns.FileSource({
+    url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Buildings_3946.geojson',
+    crs: 'EPSG:3946',
+    format: 'application/json',
+  });
+  // Create a ColorLayer for the Ariege area
+  const ariegeLayer = new udviz.itowns.ColorLayer('ariege', {
+    name: 'building',
+    transparent: true,
+    source: ariegeSource,
+    style: new udviz.itowns.Style({
+      fill: {
+        color: 'orange',
+        opacity: 0.5,
+      },
+      stroke: {
+        color: 'white',
+      },
+    }),
+  });
+  // Add the Ariege ColorLayer to the view and grant it a tooltip
+  app.view.addLayer(ariegeLayer);
 
-
+  // Road ----------------------------------
+  const roadSource = new udviz.itowns.FileSource({
+    url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson',
+    crs: 'EPSG:3946',
+    format: 'application/json',
+  });
+  // Create a ColorLayer for the road line
+  const roadLayer = new udviz.itowns.ColorLayer('road', {
+    name: 'Road',
+    transparent: true,
+    source: roadSource,
+    style: new udviz.itowns.Style({
+      fill: {
+        color: 'red',
+        opacity: 0.5,
+      },
+      stroke: {
+        color: 'black',
+      },
+    }),
+  });
+  // Add the Ariege ColorLayer to the view and grant it a tooltip
+  app.view.addLayer(roadLayer);
+  const slideShow = new SlideShow(app, app.extent);
+});

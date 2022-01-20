@@ -26,10 +26,10 @@
   },
   "geoserver":"http://localhost:8998/geoserver/cite/ows?",
   "extents": {
-    "min_x": "1845575.0810915302",
-    "max_x": "1846873.1483210607",
-    "min_y": "5174586.309865107",
-    "max_y": "5177020.10865979"
+    "min_x": "1845869.7865",
+    "max_x": "1846369.7865",
+    "min_y": "5175547.8019000003",
+    "max_y": "5176547.8019000003"
   },
   "projection": "EPSG:3946",
   "background_image_layer": {
@@ -45,6 +45,29 @@
     "name": "MNT2018_Altitude_2m",
     "format": "image/jpeg",
     "layer_name": "wms_elevation_test"
+  },
+  "color_layer":{
+    "layer1":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_1000.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "yellow",
+      "color_stroke": "white"
+    },
+    "layer2":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_750.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "green",
+      "color_stroke": "white"
+    },
+    "layer3":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Buildings_3946.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "orange",
+      "color_stroke": "white"
+    }
   },
   "camera": {
     "position": {

@@ -1,9 +1,12 @@
 /** @format */
 
 import * as udviz from 'ud-viz';
+// import * as fsi from 'fs';
 import { SlideShow } from './SlideShow';
+import { InputManager } from 'ud-viz/src/Components/InputManager';
 
 const app = new udviz.Templates.AllWidget();
+const inputManager = new InputManager();
 
 app.start('../assets/config/config.json').then((config) => {
   app.addBaseMapLayer();
@@ -245,5 +248,5 @@ app.start('../assets/config/config.json').then((config) => {
   });
   // Add the Ariege ColorLayer to the view and grant it a tooltip
   app.view.addLayer(roadLayer);
-  const slideShow = new SlideShow(app, app.extent);
+  const slideShow = new SlideShow(app, app.extent, inputManager);
 });

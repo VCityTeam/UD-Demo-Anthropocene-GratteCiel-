@@ -24,12 +24,12 @@
     "guidedTour": "guidedTour",
     "link": "link"
   },
-  "geoserver":"http://localhost:8998/geoserver/cite/ows?",
+  "geoserver": "http://localhost:8998/geoserver/cite/ows?",
   "extents": {
-    "min_x": "1845575.0810915302",
-    "max_x": "1846873.1483210607",
-    "min_y": "5174586.309865107",
-    "max_y": "5177020.10865979"
+    "min_x": "1845869.7865",
+    "max_x": "1846369.7865",
+    "min_y": "5175547.8019000003",
+    "max_y": "5176547.8019000003"
   },
   "projection": "EPSG:3946",
   "background_image_layer": {

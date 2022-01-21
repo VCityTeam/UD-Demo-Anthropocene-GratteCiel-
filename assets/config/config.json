@@ -24,7 +24,7 @@
     "guidedTour": "guidedTour",
     "link": "link"
   },
-  "geoserver":"http://localhost:8998/geoserver/cite/ows?",
+  "geoserver": "http://localhost:8998/geoserver/cite/ows?",
   "extents": {
     "min_x": "1845869.7865",
     "max_x": "1846369.7865",

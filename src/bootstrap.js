@@ -137,10 +137,6 @@ app.start('../assets/config/config.json').then((config) => {
   //   return color.set(0xff0000);
   // }
 
-  function colorLineMetro() {
-    return color.set(0xff00ff);
-  }
-
   // function colorEVAArtif(properties) {
   //   return color.set(0x0000ff);
   // }
@@ -158,6 +154,17 @@ app.start('../assets/config/config.json').then((config) => {
   //   else
   //     return color.set(0x00ff00);
   // }
+  function colorEVAArtif(properties) {
+    return color.set(0x0000ff);
+  }
+
+  function colorEVAVegetation(properties) {
+    if (properties.strate == 1) {
+      return color.set(0x005500);
+    } else if (properties.strate == 2) {
+      return color.set(0x00b000);
+    } else return color.set(0x00ff00);
+  }
 
   function colorSurfaceBatiments() {
     return color.set(0x00ffff);

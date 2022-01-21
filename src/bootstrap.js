@@ -240,7 +240,6 @@ app.start('../assets/config/config.json').then((config) => {
   app.view.camera.camera3D.position.set(pos_x, pos_y, pos_z);
   app.view.camera.camera3D.quaternion.set(quat_x, quat_y, quat_z, quat_w);
   
-});
 
   // Declare the source for the data on Ariege area ------------------------------------
   const ariegeSource = new udviz.itowns.FileSource({
@@ -290,4 +289,5 @@ app.start('../assets/config/config.json').then((config) => {
   // Add the Ariege ColorLayer to the view and grant it a tooltip
   app.view.addLayer(roadLayer);
   const slideShow = new SlideShow(app, app.extent, inputManager);
+  
 });

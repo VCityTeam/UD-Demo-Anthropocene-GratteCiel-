@@ -67,6 +67,29 @@
       "opacity" : "0.5",
       "color_fill": "orange",
       "color_stroke": "white"
+    }
+  },
+  "color_layer":{
+    "layer1":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_1000.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "yellow",
+      "color_stroke": "white"
+    },
+    "layer2":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_750.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "green",
+      "color_stroke": "white"
+    },
+    "layer3":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Buildings_3946.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "orange",
+      "color_stroke": "white"
     },
     "layer4":{
       "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson",

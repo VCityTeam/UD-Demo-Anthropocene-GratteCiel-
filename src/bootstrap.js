@@ -8,8 +8,11 @@ import { LayerView } from './LayerView';
 
 const app = new udviz.Templates.AllWidget();
 const inputManager = new InputManager();
+//let qte = require('quaternion-to-euler');
 
 app.start('../assets/config/config.json').then((config) => {
+
+  
   app.addBaseMapLayer();
 
   app.addElevationLayer();
@@ -204,14 +207,15 @@ app.start('../assets/config/config.json').then((config) => {
   let pos_x = parseInt(app.config['camera']['coordinates']['position']['x']);
   let pos_y = parseInt(app.config['camera']['coordinates']['position']['y']);
   let pos_z = parseInt(app.config['camera']['coordinates']['position']['z']);
-  let quat_x = parseInt(app.config['camera']['coordinates']['quaternion']['x']);
-  let quat_y = parseInt(app.config['camera']['coordinates']['quaternion']['y']);
-  let quat_z = parseInt(app.config['camera']['coordinates']['quaternion']['z']);
-  let quat_w = parseInt(app.config['camera']['coordinates']['quaternion']['w']);
-
+  let quat_x = parseFloat(app.config['camera']['coordinates']['quaternion']['x']);
+  let quat_y = parseFloat(app.config['camera']['coordinates']['quaternion']['y']);
+  let quat_z = parseFloat(app.config['camera']['coordinates']['quaternion']['z']);
+  let quat_w = parseFloat(app.config['camera']['coordinates']['quaternion']['w']);
+  
   app.view.camera.camera3D.position.set(pos_x, pos_y, pos_z);
   app.view.camera.camera3D.quaternion.set(quat_x, quat_y, quat_z, quat_w);
-  
+
+  app.view.camera.camera3D.updateMatrixWorld();
 
   // Declare the source for the data on Ariege area ------------------------------------
   const ariegeSource = new udviz.itowns.FileSource({
@@ -259,7 +263,7 @@ app.start('../assets/config/config.json').then((config) => {
     }),
   });
   // Add the Ariege ColorLayer to the view and grant it a tooltip
-  app.view.addLayer(roadLayer);
+  //app.view.addLayer(roadLayer);
   const slideShow = new SlideShow(app, app.extent, inputManager);
   
 });

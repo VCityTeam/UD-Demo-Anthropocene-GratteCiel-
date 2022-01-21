@@ -154,17 +154,6 @@ app.start('../assets/config/config.json').then((config) => {
   //   else
   //     return color.set(0x00ff00);
   // }
-  function colorEVAArtif(properties) {
-    return color.set(0x0000ff);
-  }
-
-  function colorEVAVegetation(properties) {
-    if (properties.strate == 1) {
-      return color.set(0x005500);
-    } else if (properties.strate == 2) {
-      return color.set(0x00b000);
-    } else return color.set(0x00ff00);
-  }
 
   function colorSurfaceBatiments() {
     return color.set(0x00ffff);
@@ -197,30 +186,6 @@ app.start('../assets/config/config.json').then((config) => {
 
   app.view.addLayer(BatimentsLayer);
 
-  var busSource = new udviz.itowns.WFSSource({
-    url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
-    protocol: 'wfs',
-    version: '2.0.0',
-    id: 'bus',
-    typeName: 'plu_h_opposable.pluzoncol',
-    crs: 'EPSG:3946',
-    extent: app.extent,
-    format: 'geojson',
-  });
-  
-  var busLayer = new udviz.itowns.GeometryLayer('zone d assainissement collectif', new udviz.THREE.Group(), {
-    update: udviz.itowns.FeatureProcessing.update,
-    convert: udviz.itowns.Feature2Mesh.convert(),
-    source: busSource,
-    style: new udviz.itowns.Style({
-      fill:{
-        base_altitude: 170.1,
-        color: colorLineMetro,
-      }
-    })
-  });
-
-  app.view.addLayer(busLayer);
 
   //Color layers
   const emprise_1_layer = new LayerView('emprise', app.config['color_layer']['layer1']);

@@ -221,33 +221,10 @@ app.start('../assets/config/config.json').then((config) => {
   const ariege_layer = new LayerView('building', app.config['color_layer']['layer3']);
   ariege_layer.createColorLayer(app.view);
 
-
-  // Road ----------------------------------
-  const roadSource = new udviz.itowns.FileSource({
-    url: 'https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson',
-    crs: 'EPSG:3946',
-    format: 'application/json',
-  });
-    // Create a ColorLayer for the road line
-  const roadLayer = new udviz.itowns.ColorLayer('road', {
-    name: 'Road',
-    transparent: true,
-    source: roadSource,
-    style: new udviz.itowns.Style({
-      fill: {
-        color: 'red',
-        opacity: 0.5,
-      },
-      stroke: {
-        color: 'black',
-      },
-    }),
-  });
-    // Add the Ariege ColorLayer to the view and grant it a tooltip
-  app.view.addLayer(roadLayer);
+  const road_layer = new LayerView('road', app.config['color_layer']['layer4']);
+  road_layer.createColorLayer(app.view);
 
   // Setup camera 
-  //
   let pos_x = parseInt(app.config['camera']['coordinates']['position']['x']);
   let pos_y = parseInt(app.config['camera']['coordinates']['position']['y']);
   let pos_z = parseInt(app.config['camera']['coordinates']['position']['z']);

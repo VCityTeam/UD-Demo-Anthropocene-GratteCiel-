@@ -67,6 +67,13 @@
       "opacity" : "0.5",
       "color_fill": "orange",
       "color_stroke": "white"
+    },
+    "layer4":{
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson",
+      "crs":"EPSG:3946",
+      "opacity" : "0.5",
+      "color_fill": "red",
+      "color_stroke": "black"
     }
   },
   "camera": {

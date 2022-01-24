@@ -132,36 +132,13 @@ app.start('../assets/config/config.json').then((config) => {
 
   var color = new udviz.THREE.Color();
 
-  // function colorLineRoads() {
-  //   return color.set(0xffff00);
-  // }
-
-  // function colorLineRails() {
-  //   return color.set(0xff0000);
-  // }
-
-  // function colorEVAArtif(properties) {
-  //   return color.set(0x0000ff);
-  // }
-
-  // function colorEVAVegetation(properties) {
-  //   if (properties.strate == 1 ) 
-  //   {
-  //     return color.set(0x005500);
-  //   }
-  //   else
-  //   if(properties.strate == 2 )
-  //   {
-  //     return color.set(0x00b000);
-  //   }
-  //   else
-  //     return color.set(0x00ff00);
-  // }
-
   function colorSurfaceBatiments() {
     return color.set(0x00ffff);
   }
 
+  let widget = document.getElementById('_all_widget_header');
+  
+  
   ////---DataGrandLyon Layers---////
 
   var BatimentsSource = new udviz.itowns.WFSSource({
@@ -265,5 +242,24 @@ app.start('../assets/config/config.json').then((config) => {
   // Add the Ariege ColorLayer to the view and grant it a tooltip
   //app.view.addLayer(roadLayer);
   const slideShow = new SlideShow(app, app.extent, inputManager);
+
+  // TO CLEAN
+  let initDisplay = widget.style.display;
+  let initSize = new udviz.THREE.Vector2(app.viewerDivElement.clientWidth,app.viewerDivElement.clientHeight);
+
+  const navWidget = document.getElementsByTagName('nav')[0];
+  let navDisplay =  navWidget.style.display;
+
+  inputManager.addKeyInput('f','keydown',()=>{
+    if (widget.style.display == 'none'){
+      widget.style.display = initDisplay;
+      navWidget.style.display = navDisplay;
+      app.view.resize(initSize.x, initSize.y);
+    }else{
+      widget.style.display = 'none';
+      navWidget.style.display = 'none';
+      app.view.resize(window.innerWidth, window.innerHeight);
+    }
+  });
   
 });

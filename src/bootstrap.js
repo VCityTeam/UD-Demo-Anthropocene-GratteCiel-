@@ -243,6 +243,8 @@ app.start('../assets/config/config.json').then((config) => {
   //app.view.addLayer(roadLayer);
   const slideShow = new SlideShow(app, app.extent, inputManager);
 
+  slideShow.createVideoTexture();
+
   // TO CLEAN
   let initDisplay = widget.style.display;
   let initSize = new udviz.THREE.Vector2(app.viewerDivElement.clientWidth,app.viewerDivElement.clientHeight);

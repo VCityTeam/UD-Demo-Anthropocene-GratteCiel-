@@ -1,5 +1,15 @@
 import { THREE } from 'ud-viz/src';
+
+/**
+ * 
+ */
 export class SlideShow {
+  /**
+   * 
+   * @param {*} app 
+   * @param {*} extent 
+   * @param {*} inputManager 
+   */
   constructor(app, extent, inputManager) {
     this.app = app;
     const extentCenter = extent.center();
@@ -30,6 +40,9 @@ export class SlideShow {
     this.initCBDrop();
   }
 
+  /**
+   * 
+   */
   initCBDrop() {
     const _this = this;
     const body = document.body;
@@ -78,6 +91,11 @@ export class SlideShow {
     );
   }
 
+  /**
+   * 
+   * @param {*} app 
+   * @param {InputManager} iM 
+   */
   initInput(app, iM) {
     const plane = this.plane;
     const _this = this;
@@ -113,6 +131,10 @@ export class SlideShow {
     });
   }
 
+  /**
+   * 
+   * @param {*} iText 
+   */
   setTexture(iText) {
     let texture;
     this.texturesFiles.forEach(function (tf) {
@@ -126,5 +148,30 @@ export class SlideShow {
     app.update3DView();
     // setTimeout(() => {
     // }, 100);
+  }
+
+  /**
+   * 
+   */
+  createVideoTexture(){
+    const video = document.createElement('video');
+    video.src = '/assets/video/videoTemporal.mp4';
+    video.autoplay = true;
+    video.muted = true;
+    video.load();
+
+    video.play();
+
+
+
+    const texture = new THREE.VideoTexture( video );
+    texture.flipX =false ;
+
+    this.plane.material = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide
+    });
+
+
   }
 }

@@ -1,14 +1,14 @@
 import { THREE } from 'ud-viz/src';
 
 /**
- * 
+ *
  */
 export class SlideShow {
   /**
-   * 
-   * @param {*} app 
-   * @param {*} extent 
-   * @param {*} inputManager 
+   *
+   * @param {*} app
+   * @param {*} extent
+   * @param {*} inputManager
    */
   constructor(app, extent, inputManager) {
     this.app = app;
@@ -20,6 +20,9 @@ export class SlideShow {
 
     this.texturesFiles = null;
     this.iCurrentText = 0;
+    this.currentTextureFiles = null;
+
+    this.notifyValue = false;
 
     this.defaultTexture = new THREE.TextureLoader().load(
       'assets/img/planeText.png'
@@ -38,10 +41,16 @@ export class SlideShow {
     app.view.scene.add(this.plane);
     this.initInput(app, inputManager);
     this.initCBDrop();
+    const _this = this;
+    const tick = function () {
+      requestAnimationFrame(tick);
+      _this.notifyChangeEachFrame();
+    };
+    tick();
   }
 
   /**
-   * 
+   *
    */
   initCBDrop() {
     const _this = this;
@@ -51,27 +60,51 @@ export class SlideShow {
         { index: 0, name: 'First', texture: _this.defaultTexture },
       ];
       _this.iCurrentText = 0;
-      let items = event.dataTransfer.items;
+      _this.currentTextureFiles = _this.texturesFiles[0];
+      const files = Array.from(event.dataTransfer.files);
+      debugger;
 
-      for (let i = 0; i < items.length; i++) {
-        let item = items[i].webkitGetAsEntry();
-        let file = items[i].getAsFile();
+      files.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+      });
+      debugger;
+      for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        if (file) {
+          try {
+            const reader = new FileReader();
 
-        if (item) {
-          if (item.isFile) {
-            try {
-              const reader = new FileReader();
-              reader.onload = function (data) {
+            reader.onload = function (data) {
+              if (file.type.includes('image/')) {
                 _this.texturesFiles.push({
                   index: i + 1,
                   name: file.name,
                   texture: new THREE.TextureLoader().load(data.target.result),
                 });
-              };
-              reader.readAsDataURL(file);
-            } catch (e) {
-              throw new Error(e);
-            }
+              } else if (file.type.includes('video/')) {
+                const video = document.createElement('video');
+                video.src = data.target.result;
+                video.autoplay = true;
+                video.muted = true;
+                video.loop = true;
+                video.load();
+
+                const videoTexture = new THREE.VideoTexture(video);
+                videoTexture.center.set(0.5, 0.5);
+                videoTexture.rotation = -Math.PI / 2;
+
+                _this.texturesFiles.push({
+                  index: i + 1,
+                  name: file.name,
+                  texture: videoTexture,
+                  video: video,
+                });
+              }
+            };
+
+            reader.readAsDataURL(file);
+          } catch (e) {
+            throw new Error(e);
           }
         }
       }
@@ -92,9 +125,9 @@ export class SlideShow {
   }
 
   /**
-   * 
-   * @param {*} app 
-   * @param {InputManager} iM 
+   *
+   * @param {*} app
+   * @param {InputManager} iM
    */
   initInput(app, iM) {
     const plane = this.plane;
@@ -132,28 +165,41 @@ export class SlideShow {
   }
 
   /**
-   * 
-   * @param {*} iText 
+   *
+   * @param {*} iText
    */
   setTexture(iText) {
-    let texture;
+    const _this = this;
+    if (this.currentTextureFiles.video) {
+      this.currentTextureFiles.video.pause();
+      this.currentTextureFiles.video.currentTime = 0;
+      this.notifyValue = false;
+    }
     this.texturesFiles.forEach(function (tf) {
       if (tf.index == iText) {
-        texture = tf.texture;
+        _this.currentTextureFiles = tf;
+        if (tf.video) {
+          tf.video.play();
+          _this.notifyValue = true;
+        }
       }
     });
 
-    this.plane.material.map = texture;
+    this.plane.material.map = this.currentTextureFiles.texture;
     const app = this.app;
     app.update3DView();
-    // setTimeout(() => {
-    // }, 100);
+  }
+
+  notifyChangeEachFrame() {
+    if (this.notifyValue) {
+      this.app.update3DView();
+    }
   }
 
   /**
-   * 
+   *
    */
-  createVideoTexture(){
+  createVideoTexture() {
     const video = document.createElement('video');
     video.src = '/assets/video/videoTemporal.mp4';
     video.autoplay = true;
@@ -162,16 +208,11 @@ export class SlideShow {
 
     video.play();
 
-
-
-    const texture = new THREE.VideoTexture( video );
-    texture.flipX =false ;
+    const texture = new THREE.VideoTexture(video);
 
     this.plane.material = new THREE.MeshBasicMaterial({
       map: texture,
-      side: THREE.DoubleSide
+      side: THREE.DoubleSide,
     });
-
-
   }
 }

@@ -11,8 +11,6 @@ const inputManager = new InputManager();
 //let qte = require('quaternion-to-euler');
 
 app.start('../assets/config/config.json').then((config) => {
-
-  
   app.addBaseMapLayer();
 
   app.addElevationLayer();
@@ -92,7 +90,6 @@ app.start('../assets/config/config.json').then((config) => {
     name: 'Guided Tours',
   });
 
-
   ////// GEOCODING EXTENSION
   const geocodingService = new udviz.Widgets.Extensions.GeocodingService(
     requestService,
@@ -137,8 +134,7 @@ app.start('../assets/config/config.json').then((config) => {
   }
 
   let widget = document.getElementById('_all_widget_header');
-  
-  
+
   ////---DataGrandLyon Layers---////
 
   var BatimentsSource = new udviz.itowns.WFSSource({
@@ -151,44 +147,64 @@ app.start('../assets/config/config.json').then((config) => {
     extent: app.extent,
     format: 'geojson',
   });
-    
-  var BatimentsLayer = new udviz.itowns.GeometryLayer('Batiments', new udviz.THREE.Group(), {
-    update: udviz.itowns.FeatureProcessing.update,
-    convert: udviz.itowns.Feature2Mesh.convert(),
-    source: BatimentsSource,
-    style: new udviz.itowns.Style({
-      fill:{
-        base_altitude: 180.1,
-        color: colorSurfaceBatiments,
-      }
-    })
-  });
+
+  var BatimentsLayer = new udviz.itowns.GeometryLayer(
+    'Batiments',
+    new udviz.THREE.Group(),
+    {
+      update: udviz.itowns.FeatureProcessing.update,
+      convert: udviz.itowns.Feature2Mesh.convert(),
+      source: BatimentsSource,
+      style: new udviz.itowns.Style({
+        fill: {
+          base_altitude: 180.1,
+          color: colorSurfaceBatiments,
+        },
+      }),
+    }
+  );
 
   app.view.addLayer(BatimentsLayer);
 
-
   //Color layers
-  const emprise_1_layer = new LayerView('emprise', app.config['color_layer']['layer1']);
+  const emprise_1_layer = new LayerView(
+    'emprise',
+    app.config['color_layer']['layer1']
+  );
   emprise_1_layer.createColorLayer(app.view);
 
-  const emprise_2_layer = new LayerView('emprise_2', app.config['color_layer']['layer2']);
+  const emprise_2_layer = new LayerView(
+    'emprise_2',
+    app.config['color_layer']['layer2']
+  );
   emprise_2_layer.createColorLayer(app.view);
 
-  const ariege_layer = new LayerView('building', app.config['color_layer']['layer3']);
+  const ariege_layer = new LayerView(
+    'building',
+    app.config['color_layer']['layer3']
+  );
   ariege_layer.createColorLayer(app.view);
 
   const road_layer = new LayerView('road', app.config['color_layer']['layer4']);
   road_layer.createColorLayer(app.view);
 
-  // Setup camera 
+  // Setup camera
   let pos_x = parseInt(app.config['camera']['coordinates']['position']['x']);
   let pos_y = parseInt(app.config['camera']['coordinates']['position']['y']);
   let pos_z = parseInt(app.config['camera']['coordinates']['position']['z']);
-  let quat_x = parseFloat(app.config['camera']['coordinates']['quaternion']['x']);
-  let quat_y = parseFloat(app.config['camera']['coordinates']['quaternion']['y']);
-  let quat_z = parseFloat(app.config['camera']['coordinates']['quaternion']['z']);
-  let quat_w = parseFloat(app.config['camera']['coordinates']['quaternion']['w']);
-  
+  let quat_x = parseFloat(
+    app.config['camera']['coordinates']['quaternion']['x']
+  );
+  let quat_y = parseFloat(
+    app.config['camera']['coordinates']['quaternion']['y']
+  );
+  let quat_z = parseFloat(
+    app.config['camera']['coordinates']['quaternion']['z']
+  );
+  let quat_w = parseFloat(
+    app.config['camera']['coordinates']['quaternion']['w']
+  );
+
   app.view.camera.camera3D.position.set(pos_x, pos_y, pos_z);
   app.view.camera.camera3D.quaternion.set(quat_x, quat_y, quat_z, quat_w);
 
@@ -243,25 +259,27 @@ app.start('../assets/config/config.json').then((config) => {
   //app.view.addLayer(roadLayer);
   const slideShow = new SlideShow(app, app.extent, inputManager);
 
-  slideShow.createVideoTexture();
+  // slideShow.createVideoTexture();
 
   // TO CLEAN
   let initDisplay = widget.style.display;
-  let initSize = new udviz.THREE.Vector2(app.viewerDivElement.clientWidth,app.viewerDivElement.clientHeight);
+  let initSize = new udviz.THREE.Vector2(
+    app.viewerDivElement.clientWidth,
+    app.viewerDivElement.clientHeight
+  );
 
   const navWidget = document.getElementsByTagName('nav')[0];
-  let navDisplay =  navWidget.style.display;
+  let navDisplay = navWidget.style.display;
 
-  inputManager.addKeyInput('f','keydown',()=>{
-    if (widget.style.display == 'none'){
+  inputManager.addKeyInput('f', 'keydown', () => {
+    if (widget.style.display == 'none') {
       widget.style.display = initDisplay;
       navWidget.style.display = navDisplay;
       app.view.resize(initSize.x, initSize.y);
-    }else{
+    } else {
       widget.style.display = 'none';
       navWidget.style.display = 'none';
       app.view.resize(window.innerWidth, window.innerHeight);
     }
   });
-  
 });

@@ -46,32 +46,18 @@
     "format": "image/jpeg",
     "layer_name": "wms_elevation_test"
   },
-  "color_layer":{
-    "layer1":{
-      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_1000.geojson",
-      "crs":"EPSG:3946",
-      "opacity" : "0.5",
-      "color_fill": "yellow",
-      "color_stroke": "white"
-    },
-    "layer2":{
-      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Emprise_500_750.geojson",
-      "crs":"EPSG:3946",
-      "opacity" : "0.5",
-      "color_fill": "green",
-      "color_stroke": "white"
-    },
-    "layer3":{
-      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Buildings_3946.geojson",
-      "crs":"EPSG:3946",
-      "opacity" : "0.5",
+  "color_layer": {
+    "layer3": {
+      "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/ReAgent/includes/GratteCiel/Data/Data_cc46/New_Buildings_500_1000_3946.geojson",
+      "crs": "EPSG:3946",
+      "opacity": "0.5",
       "color_fill": "orange",
       "color_stroke": "white"
     },
-    "layer4":{
+    "layer4": {
       "url": "https://raw.githubusercontent.com/VCityTeam/UD_ReAgent_ABM/master/Data/Data_cc46/Roads_3946.geojson",
-      "crs":"EPSG:3946",
-      "opacity" : "0.5",
+      "crs": "EPSG:3946",
+      "opacity": "0.5",
       "color_fill": "red",
       "color_stroke": "black"
     }
@@ -82,17 +68,17 @@
       "heading": "-49.6",
       "tilt": "17"
     },
-    "coordinates":{
+    "coordinates": {
       "position": {
-          "x": "1846111.0497844059",
-          "y": "5176054.879990878",
-          "z": "1172.9389276490542"
+        "x": "1846068",
+        "y": "5176080",
+        "z": "1475"
       },
       "quaternion": {
-          "x": "0.0008739234026722933",
-          "y": "-0.000873147617772062",
-          "z": "-0.7067921822132598",
-          "w": "0.7074201615965875"
+        "x": "0",
+        "y": "0",
+        "z": "-0.7071067811865476",
+        "w": "0.7071067811865476"
       }
     }
   },

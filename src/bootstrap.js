@@ -15,7 +15,7 @@ app.start('../assets/config/config.json').then((config) => {
 
   app.addElevationLayer();
 
-  app.setupAndAdd3DTilesLayers();
+  // app.setupAndAdd3DTilesLayers();
 
   ////// REQUEST SERVICE
   const requestService = new udviz.Components.RequestService();
@@ -137,47 +137,47 @@ app.start('../assets/config/config.json').then((config) => {
 
   ////---DataGrandLyon Layers---////
 
-  var BatimentsSource = new udviz.itowns.WFSSource({
-    url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
-    protocol: 'wfs',
-    version: '2.0.0',
-    id: 'batiments',
-    typeName: 'cad_cadastre.cadbatiment',
-    crs: 'EPSG:3946',
-    extent: app.extent,
-    format: 'geojson',
-  });
+  // var BatimentsSource = new udviz.itowns.WFSSource({
+  //   url: 'https://download.data.grandlyon.com/wfs/grandlyon?',
+  //   protocol: 'wfs',
+  //   version: '2.0.0',
+  //   id: 'batiments',
+  //   typeName: 'cad_cadastre.cadbatiment',
+  //   crs: 'EPSG:3946',
+  //   extent: app.extent,
+  //   format: 'geojson',
+  // });
 
-  var BatimentsLayer = new udviz.itowns.GeometryLayer(
-    'Batiments',
-    new udviz.THREE.Group(),
-    {
-      update: udviz.itowns.FeatureProcessing.update,
-      convert: udviz.itowns.Feature2Mesh.convert(),
-      source: BatimentsSource,
-      style: new udviz.itowns.Style({
-        fill: {
-          base_altitude: 180.1,
-          color: colorSurfaceBatiments,
-        },
-      }),
-    }
-  );
+  // var BatimentsLayer = new udviz.itowns.GeometryLayer(
+  //   'Batiments',
+  //   new udviz.THREE.Group(),
+  //   {
+  //     update: udviz.itowns.FeatureProcessing.update,
+  //     convert: udviz.itowns.Feature2Mesh.convert(),
+  //     source: BatimentsSource,
+  //     style: new udviz.itowns.Style({
+  //       fill: {
+  //         base_altitude: 180.1,
+  //         color: colorSurfaceBatiments,
+  //       },
+  //     }),
+  //   }
+  // );
 
-  app.view.addLayer(BatimentsLayer);
+  // app.view.addLayer(BatimentsLayer);
 
   //Color layers
-  const emprise_1_layer = new LayerView(
-    'emprise',
-    app.config['color_layer']['layer1']
-  );
-  emprise_1_layer.createColorLayer(app.view);
+  // const emprise_1_layer = new LayerView(
+  //   'emprise',
+  //   app.config['color_layer']['layer1']
+  // );
+  // emprise_1_layer.createColorLayer(app.view);
 
-  const emprise_2_layer = new LayerView(
-    'emprise_2',
-    app.config['color_layer']['layer2']
-  );
-  emprise_2_layer.createColorLayer(app.view);
+  // const emprise_2_layer = new LayerView(
+  //   'emprise_2',
+  //   app.config['color_layer']['layer2']
+  // );
+  // emprise_2_layer.createColorLayer(app.view);
 
   const ariege_layer = new LayerView(
     'building',

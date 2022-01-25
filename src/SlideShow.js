@@ -31,7 +31,7 @@ export class SlideShow {
     const material = new THREE.MeshBasicMaterial({
       map: this.defaultTexture,
       side: THREE.DoubleSide,
-      transparent: true,
+      transparent: false,
       opacity: 0.9,
     });
     this.plane = new THREE.Mesh(geometry, material);
@@ -62,12 +62,10 @@ export class SlideShow {
       _this.iCurrentText = 0;
       _this.currentTextureFiles = _this.texturesFiles[0];
       const files = Array.from(event.dataTransfer.files);
-      debugger;
 
       files.sort(function (a, b) {
         return a.name.localeCompare(b.name);
       });
-      debugger;
       for (let i = 0; i < files.length; i++) {
         let file = files[i];
         if (file) {
@@ -91,6 +89,7 @@ export class SlideShow {
 
                 const videoTexture = new THREE.VideoTexture(video);
                 videoTexture.center.set(0.5, 0.5);
+
                 videoTexture.rotation = -Math.PI / 2;
 
                 _this.texturesFiles.push({

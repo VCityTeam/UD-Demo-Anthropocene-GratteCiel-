@@ -32,7 +32,6 @@ export class SlideShow {
       map: this.defaultTexture,
       side: THREE.DoubleSide,
       transparent: false,
-      opacity: 0.9,
     });
     this.plane = new THREE.Mesh(geometry, material);
 
@@ -123,6 +122,8 @@ export class SlideShow {
     );
   }
 
+  routineNextTexture() {}
+
   /**
    *
    * @param {*} app
@@ -161,6 +162,7 @@ export class SlideShow {
 
       app.update3DView();
     });
+    iM.addKeyInput('r', 'keydown', function () {});
   }
 
   /**

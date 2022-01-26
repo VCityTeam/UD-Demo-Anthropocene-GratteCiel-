@@ -5,9 +5,12 @@ import * as udviz from 'ud-viz';
 import { SlideShow } from './SlideShow';
 import { InputManager } from 'ud-viz/src/Components/InputManager';
 import { LayerView } from './LayerView';
+const udvShared = require('ud-viz/src/Game/Shared/Shared');
+const THREEUtils = udvShared.Components.THREEUtils;
 
 const app = new udviz.Templates.AllWidget();
 const inputManager = new InputManager();
+
 //let qte = require('quaternion-to-euler');
 
 app.start('../assets/config/config.json').then((config) => {
@@ -282,4 +285,7 @@ app.start('../assets/config/config.json').then((config) => {
       app.view.resize(window.innerWidth, window.innerHeight);
     }
   });
+
+  const renderer = app.view.mainLoop.gfxEngine.renderer;
+  THREEUtils.initRenderer(renderer, new udviz.THREE.Color(0, 0, 0));
 });

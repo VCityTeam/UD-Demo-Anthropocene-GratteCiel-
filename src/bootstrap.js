@@ -266,6 +266,9 @@ app.start('../assets/config/config.json').then((config) => {
 
   // TO CLEAN
   let initDisplay = widget.style.display;
+  widget.style.backgroundColor = 'white';
+
+  console.log(widget);
   let initSize = new udviz.THREE.Vector2(
     app.viewerDivElement.clientWidth,
     app.viewerDivElement.clientHeight
@@ -273,6 +276,7 @@ app.start('../assets/config/config.json').then((config) => {
 
   const navWidget = document.getElementsByTagName('nav')[0];
   let navDisplay = navWidget.style.display;
+  navWidget.style.backgroundColor = 'white';
 
   inputManager.addKeyInput('f', 'keydown', () => {
     if (widget.style.display == 'none') {
@@ -287,5 +291,5 @@ app.start('../assets/config/config.json').then((config) => {
   });
 
   const renderer = app.view.mainLoop.gfxEngine.renderer;
-  THREEUtils.initRenderer(renderer, new udviz.THREE.Color(0, 0, 0));
+  THREEUtils.initRenderer(renderer, new udviz.THREE.Color(255, 255, 255));
 });

@@ -1,49 +1,57 @@
 /**
-* Name: gratt_ciel
-* Projet test pour les déplacement dans le nouveau centre ville gratte ciel de Villeurbanne 
-* Author: Larry
+* Name: Scenario1
+* Based on the internal empty template. 
+* Author: 33662
 * Tags: 
 */
 
 
-model gratt_ciel
+model Scenario1
 
-/* Insert your model definition here */
 global {
-    file shape_file_buildings <- file("../includes/Groupe_1/buildings.shp");
-    file shape_file_roads <- file("../includes/Groupe_1/routes.shp");
-    file shape_file_bounds <- file("../includes/Groupe_1/area.shp");
+    file shape_file_buildings <- file("./../../includes/Groupe_2/Bati_zones_avec_commerces.shp");
+    file shape_file_roads <- file("./../../includes/Groupe_2/routes.shp");
+    file shape_file_bounds <- file("./../../includes/Groupe_2/Emprise_500_1000.geojson");
+    file shape_file_supplier <- file("./../../includes/Groupe_2/Entrepots_v2.shp");
+    file image1 <- file("./../../includes/Groupe_2/legende_livraison.png");
     geometry shape <- envelope(shape_file_bounds);
-    float step <- 10 #mn;
+    float step <- 0.1 #mn;
     date starting_date <- date("2019-09-01-00-00-00");
     int nb_people <- 100;
     int min_work_start <- 6;
     int max_work_start <- 8;
-    int min_work_end <- 16; 
-    int max_work_end <- 20; 
-    float min_speed <- 0.1 #km / #h;
-    float max_speed <- 0.5 #km / #h; 
+    int min_work_end <- 11; 
+    int max_work_end <- 15; 
+    float min_speed <- 0.2 #km / #h;
+    float max_speed <- 0.4 #km / #h; 
     graph the_graph;
-    
-    init {
+     init {
     create building from: shape_file_buildings with: [type::string(read ("usage_1"))] {
         if type="RÃ©sidentiel" {
         color <- #blue ;
         }
-        if type="Industriel" or type="Commercial et services"{
+        if type="Commerce nouveau" or type="Commercial et services"{
         color <- #red ;
         }
     }
     create road from: shape_file_roads ;
     the_graph <- as_edge_graph(road);
+    
+    create image_legende number:1{
+    	location<-{world.shape.width*0.1,world.shape.height*0.9};
+    }
+    
+    
+    
+    create supplier from: shape_file_supplier;
         
     list<building> residential_buildings <- building where (each.type="RÃ©sidentiel");
-    list<building> industrial_buildings <- building  where (each.type="Industriel" or each.type="Commercial et services" ) ;
+    list<building> industrial_buildings <- building  where (each.type="Industriel" or each.type="Commercial et services" or each.type="Commerce nouveau" ) ;
     create people number: nb_people {
-        speed <- rnd(min_speed, max_speed);
+        speed <- rnd(min_speed, max_speed)/2;
         start_work <- rnd (min_work_start, max_work_start);
         end_work <- rnd(min_work_end, max_work_end);
-        living_place <- one_of(residential_buildings) ;
+        living_place <- one_of(supplier) ;
         working_place <- one_of(industrial_buildings) ;
         objective <- "resting";
         location <- any_location_in (living_place); 
@@ -61,15 +69,32 @@ species building {
     }
 }
 
-species road  {
-    rgb color <- #black ;
+species image_legende {
+	aspect base {
+		draw square(100) color:#white;
+		draw image_file (image1) size:{100#px, 100#px} rotate:90;
+	}
+}
+
+
+species supplier parent:building {
+    string type; 
+    rgb color <- #blue  ;
+    
     aspect base {
     draw shape color: color ;
     }
 }
 
+species road  {
+    rgb color <- #black ;
+    aspect base {
+    draw shape color: color width:2;
+    }
+}
+
 species people skills:[moving] {
-    rgb color <- #yellow ;
+    rgb color <- #black ;
     building living_place <- nil ;
     building working_place <- nil ;
     int start_work ;
@@ -84,18 +109,19 @@ species people skills:[moving] {
         
     reflex time_to_go_home when: current_date.hour = end_work and objective = "working"{
     objective <- "resting" ;
-    the_target <- any_location_in (living_place); 
+    the_target <- any_location_in (living_place);
     } 
      
     reflex move when: the_target != nil {
     do goto target: the_target on: the_graph ; 
     if the_target = location {
         the_target <- nil ;
+        color <- #white ;
     }
     }
     
     aspect base {
-    draw circle(10) color: color border: #black;
+    draw rectangle(5,10) color: color border: #black rotate:heading+90;
     }
 }
 
@@ -113,10 +139,14 @@ experiment road_traffic type: gui {
     parameter "maximal speed" var: max_speed category: "People" max: 10 #km/#h;
     
     output {
-    display city_display type: opengl {
+    display city_display type: opengl rotate:90{
         species building aspect: base ;
         species road aspect: base ;
         species people aspect: base ;
+        species supplier aspect: base ;
+        species image_legende aspect: base;
+        
     }
     }
 }
+

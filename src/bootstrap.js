@@ -13,7 +13,7 @@ const inputManager = new InputManager();
 
 //let qte = require('quaternion-to-euler');
 
-app.start('../assets/config/config.json').then((config) => {
+app.start('./assets/config/config.json').then((config) => {
   app.addBaseMapLayer();
 
   app.addElevationLayer();
